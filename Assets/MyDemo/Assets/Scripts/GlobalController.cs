@@ -107,7 +107,7 @@ public class GlobalController : MonoBehaviour
         slider2 = GameObject.Find("PinchSliderHor");
 
         // scale functions
-        gScaleState = ScaleState.Original;
+        gScaleMode = ScaleMode.Original;
         
     }
 
@@ -136,7 +136,7 @@ public class GlobalController : MonoBehaviour
 
     public void ResetColorForAll()
     {
-        foreach(GameObject o in bones)
+        foreach (GameObject o in bones)
         {
             o.GetComponent<AdjustBoneColor>().ResetColor();
         }
@@ -213,7 +213,7 @@ public class GlobalController : MonoBehaviour
     {
         gColorState = 1 - gColorState;
         TextMeshPro[] texts = GameObject.Find("EditOpacityButton").GetComponentsInChildren<TextMeshPro>();
-        foreach(TextMeshPro tmp in texts)
+        foreach (TextMeshPro tmp in texts)
         {
             if (gColorState == ColorState.Select)
                 tmp.text = "Edit Opacity";
@@ -245,18 +245,14 @@ public class GlobalController : MonoBehaviour
         //Vector3 pos = bones[0].transform.localPosition;
         //Vector3 scaledPosition = new Vector3(pos.x / scale.x, pos.y / scale.y, pos.z / scale.z);
         //bones[0].transform.localPosition = scaledPosition;
-        switch (gScaleState)
+        switch (gScaleMode)
         {
-            case ScaleState.Half:
+            case ScaleMode.Half:
                 {
-                    gScaleState = ScaleState.Original;
-                    for(int i = 1; i< 100; i++)
-                    {
-                        Invoke("ScaleUpStep", 0.5f * i / 100);
-                    }
-                    //bones[0].transform.localScale = scale;
+                    gScaleMode = ScaleMode.Original;
+                    bones[0].transform.localScale = scale;
 
-                    foreach(TextMeshPro tmp in texts)
+                    foreach (TextMeshPro tmp in texts)
                     {
                         tmp.text = "Zoom: 2x";
                     }
