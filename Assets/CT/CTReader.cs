@@ -24,6 +24,7 @@ public class CTReader : MonoBehaviour {
         slicer.SetInts("dims", nrrd.dims);
     }
 
+    // let the slicer read a plane from the NRRD texture data.
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
         var rtex = new RenderTexture(result.width, result.height, 1);
         rtex.enableRandomWrite = true;

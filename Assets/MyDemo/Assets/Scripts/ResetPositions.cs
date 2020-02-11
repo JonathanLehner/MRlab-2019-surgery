@@ -19,6 +19,7 @@ public class ResetPositions : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // store the transformations of bones in a list for reset functions
         for (int i = 2; i <= GlobalController.numberOfBones; i++)
         {
             GameObject t = GameObject.Find("Bone_" + i);
@@ -40,17 +41,7 @@ public class ResetPositions : MonoBehaviour
 
     public void resetPositions()
     {
-        //    StartMethod example = new StartMethod();
-        //    bones = example.getBones();
-        //    transformOfBones = example.getTransform();
-
-        Debug.Log("Botton Pressed");
-
-        //Debug.Log("Num of Bones transform, " + transformOfBones.Count);
-        Debug.Log("Num of Bonesbones, " + bones.Count);
-
-        //Transform worldTransform = GameObject.Find("BoneCollection").transform;
-
+        // reset the position, rotation and scale of bone fragments
         for (int i = 0; i < originalTransform.Count; i++)
         {
             bones[i].transform.localPosition = originalTransform[i].pos;

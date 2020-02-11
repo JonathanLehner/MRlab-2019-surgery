@@ -41,34 +41,13 @@ public class GlobalController : MonoBehaviour
     void Start()
     {
 
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/MyDemo/Assets/Meshes");
-        //FileInfo[] fis = di.GetFiles();
-
-        //foreach (FileInfo fi in fis)
-        //{
-        //    // File Name Convensions : 
-        //    // Bone_1.obj for base bones,
-        //    // Bone_#.obj for fragments,
-        //    // Bone_#_aligned.obj for adjusted fragments,
-        //    // Bone_{#+1}_aligned.obj for addition artifitial structures.
-
-        //    //Debug.Log(fi.Name);
-        //    if (fi.Extension.Contains("obj"))
-        //    {
-        //        if (fi.Name.Contains("aligned"))
-        //            numberOfAdjustedBones++;
-        //        else
-        //            numberOfBones++;
-        //    }
-        //}
-
         numberOfBones = 6;
         numberOfAdjustedBones = 7;
 
         Debug.Log("Number of bones loaded: " + numberOfBones);
         Debug.Log("Number of adjusted bones loaded: " + numberOfAdjustedBones);
 
-        // init bone references
+        // store the initial trasformations of bone fragements
         for (int i = 1; i <= numberOfBones; i++)
         {
             GameObject t = GameObject.Find("Bone_" + i);
@@ -83,6 +62,7 @@ public class GlobalController : MonoBehaviour
             originalTransform.Add(ti);
         }
 
+        // store the initial trasformations of adjusted bone fragments
         for (int i = 1; i <= numberOfAdjustedBones; i++)
         {
             GameObject t = GameObject.Find("Bone_" + i + "_aligned");
@@ -107,7 +87,7 @@ public class GlobalController : MonoBehaviour
         slider2 = GameObject.Find("PinchSliderHor");
 
         // scale functions
-        gScaleMode = ScaleMode.Original;
+        gScaleState = ScaleState.Original;
         
     }
 
@@ -116,6 +96,7 @@ public class GlobalController : MonoBehaviour
         Debug.Log("Reset Botton Pressed");
         Debug.Log(originalTransform.Count);
 
+        // reset the transformation components of every bone fragments
         for (int i = 1; i < originalTransform.Count; i++)
         {
             bones[i].transform.localPosition = originalTransform[i].pos;
@@ -126,7 +107,6 @@ public class GlobalController : MonoBehaviour
         adjustedBones[0].transform.localPosition = originalTransformAdjusted[0].pos;
         adjustedBones[0].transform.localRotation = originalTransformAdjusted[0].rotate;
         adjustedBones[0].transform.localScale = originalTransformAdjusted[0].scale;
-
 
         Vector3 scale = originalTransform[0].scale;
         Vector3 localScale = (gScaleState == ScaleState.Original) ? scale :
@@ -146,6 +126,7 @@ public class GlobalController : MonoBehaviour
     {
         TextMeshPro[] texts = GameObject.Find("ShowAdjustment").GetComponentsInChildren<TextMeshPro>();
 
+        // change the state of bone to be displayed or hidden according to current state.
         switch (gBoneState)
         {
             case BoneState.ShowAll:
@@ -186,7 +167,7 @@ public class GlobalController : MonoBehaviour
     {
         TextMeshPro[] texts = GameObject.Find("ShowSlider").GetComponentsInChildren<TextMeshPro>();
 
-
+        // show or hide the slider components according to the current state of sliders
         if (slider.activeInHierarchy)
         {
             slider.SetActive(false);
@@ -211,6 +192,7 @@ public class GlobalController : MonoBehaviour
 
     public void ChangeColoringMode()
     {
+        // swap between the opacity changing and highlighting mode.
         gColorState = 1 - gColorState;
         TextMeshPro[] texts = GameObject.Find("EditOpacityButton").GetComponentsInChildren<TextMeshPro>();
         foreach (TextMeshPro tmp in texts)
@@ -242,14 +224,13 @@ public class GlobalController : MonoBehaviour
     {
         TextMeshPro[] texts = GameObject.Find("ScaleButton").GetComponentsInChildren<TextMeshPro>();
         Vector3 scale = originalTransform[0].scale;
-        //Vector3 pos = bones[0].transform.localPosition;
-        //Vector3 scaledPosition = new Vector3(pos.x / scale.x, pos.y / scale.y, pos.z / scale.z);
-        //bones[0].transform.localPosition = scaledPosition;
-        switch (gScaleMode)
+
+        // the scale of bones changes from 0.5 -> 1.0 -> 2.0 -> 0.5 repeatedly
+        switch (gScaleState)
         {
-            case ScaleMode.Half:
+            case ScaleState.Half:
                 {
-                    gScaleMode = ScaleMode.Original;
+                    gScaleState = ScaleState.Original;
                     bones[0].transform.localScale = scale;
 
                     foreach (TextMeshPro tmp in texts)

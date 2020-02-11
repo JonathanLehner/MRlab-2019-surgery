@@ -23,6 +23,8 @@ public class HandSlice : MonoBehaviour {
     void Update() {
         if (curInterval++ < interval) return;
         curInterval = 0;
+
+        // track the position of hands, which denotes a slicing plane, and sample plane from the NRRD texture
         if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po1) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po2) &&
             HandJointUtils.TryGetJointPose(TrackedHandJoint.PinkyKnuckle, leftHanded ? Handedness.Left : Handedness.Right, out MixedRealityPose po3)) {
